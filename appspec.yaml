@@ -1,0 +1,20 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ec2-user/app/hello-app
+    overwrite: yes
+hooks:
+  ApplicationStop:
+    - location: scripts/process/application-stop-process.sh
+      timeout: 600
+  BeforeInstall:
+    - location: scripts/process/before-install-process.sh
+      timeout: 600
+  AfterInstall:
+    - location: scripts/process/after-install-process.sh
+      timeout: 600
+  ApplicationStart:
+    - location: scripts/process/application-start-process.sh
+      timeout: 600
+file_exists_behavior: OVERWRITE
