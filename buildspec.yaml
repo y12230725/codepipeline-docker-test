@@ -1,0 +1,32 @@
+version: 0.2
+
+phases:
+  install: # 필요한 패키지 설치 등 빌드 환경을 설정하는 명령어들
+    commands:
+      - echo "Install phase"
+  pre_build: # 코드 스타일 검사 등 빌드 전 사전 작업을 수행하는 명령어들
+    commands:
+      - echo Logging in to Amazon ECR...
+      - echo "IMAGE_REPO_NAME - $IMAGE_REPO_NAME"
+      - echo "IMAGE_TAG - $IMAGE_TAG"
+      - echo "AWS_ACCOUNT_ID - $AWS_ACCOUNT_ID"
+      - echo "AWS_DEFAULT_REGION - $AWS_DEFAULT_REGION"
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+  build: # 소스 코드를 빌드하는 명령어들
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+  post_build: # 빌드 완료 후 추가 작업을 수행하는 명령어들
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - echo "updated line for codebuild ci"
+      - printf '[{"name":"image-name","imageUri":"%s"}]' $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG > i
+artifacts: # 빌드된 결과물의 경로
+  files:
+    - scripts/**/*
+    - appspec.yml
+version: 0.2
