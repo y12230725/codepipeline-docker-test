@@ -7,6 +7,7 @@ if [ "$(docker inspect -f '{{.State.Running}}' rabbitmq 2>/dev/null)" == "true" 
     echo "Container rabbitmq is already running."
 else
     # Run rabbitmq container
+    docker rm -f rabbitmq
     docker run -i -t -d --name rabbitmq --network hello-network rabbitmq:latest
 fi
 
