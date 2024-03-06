@@ -28,5 +28,5 @@ phases:
 artifacts: # 빌드된 결과물의 경로
   files:
     - scripts/**/*
-    - appspec.yml
+    - appspec.yaml
 version: 0.2
