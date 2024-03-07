@@ -13,6 +13,7 @@ RUN npm install -g pnpm
 RUN npm install -g @nestjs/cli
 RUN npm install -g typescript
 RUN npm install -g concurrently
+RUN npm install -g pm2
 RUN mkdir -p /home/app
 
 ADD ./ /home/app
