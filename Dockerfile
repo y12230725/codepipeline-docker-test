@@ -1,4 +1,4 @@
-FROM amazonlinux:latest
+FROM public.ecr.aws/amazonlinux/amazonlinux:latest
 LABEL youngwoo <cxz5309@mz.co.kr>
 
 RUN yum -y update \
